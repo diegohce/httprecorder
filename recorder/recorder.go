@@ -9,26 +9,27 @@ import (
 	"net/http"
 )
 
-type ResponseRecord struct {
+type responseRecord struct {
 	Headers http.Header
 	Body    string
 }
 
-type RequestRecord struct {
+type requestRecord struct {
 	Headers  http.Header
 	Body     string
-	Response ResponseRecord
+	Response responseRecord
 }
 
-type Recorder struct {
-	Records map[string]map[string]RequestRecord
+type recorder struct {
+	Records map[string]map[string]requestRecord
 }
 
-var RRRecorder *Recorder
+// RRRecorder The requests and responses recorder.
+var RRRecorder *recorder
 
 func init() {
-	RRRecorder = &Recorder{
-		Records: make(map[string]map[string]RequestRecord),
+	RRRecorder = &recorder{
+		Records: make(map[string]map[string]requestRecord),
 	}
 }
 
@@ -40,7 +41,7 @@ func (r *bodyClone) Close() error {
 	return nil
 }
 
-func (r *Recorder) StoreRequest(req *http.Request) error {
+func (r *recorder) StoreRequest(req *http.Request) error {
 	var b []byte
 	var err error
 
@@ -58,16 +59,16 @@ func (r *Recorder) StoreRequest(req *http.Request) error {
 	key := fmt.Sprintf("%s/%s", req.URL.Path, req.URL.RawQuery)
 
 	if _, ok := r.Records[key]; !ok {
-		r.Records[key] = make(map[string]RequestRecord)
+		r.Records[key] = make(map[string]requestRecord)
 	}
-	r.Records[key][req.Method] = RequestRecord{
+	r.Records[key][req.Method] = requestRecord{
 		Headers: req.Header,
 		Body:    string(b),
 	}
 	return nil
 }
 
-func (r *Recorder) StoreResponse(res *http.Response) error {
+func (r *recorder) StoreResponse(res *http.Response) error {
 	var b []byte
 	var err error
 
@@ -101,7 +102,7 @@ func (r *Recorder) StoreResponse(res *http.Response) error {
 	return nil
 }
 
-func (r *Recorder) Dump(filename string) error {
+func (r *recorder) Dump(filename string) error {
 
 	if len(r.Records) == 0 {
 		return nil
@@ -115,7 +116,7 @@ func (r *Recorder) Dump(filename string) error {
 	return ioutil.WriteFile(filename, b, 0600)
 }
 
-func (r *Recorder) Load(filename string) error {
+func (r *recorder) Load(filename string) error {
 
 	b, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -142,7 +143,7 @@ func (r *Recorder) Load(filename string) error {
 
 		for m, req := range methodObject {
 
-			var reqRecord RequestRecord
+			var reqRecord requestRecord
 			if err := json.Unmarshal(*req, &reqRecord); err != nil {
 				return err
 			}
@@ -150,7 +151,7 @@ func (r *Recorder) Load(filename string) error {
 			//fmt.Printf("%+v\n", reqRecord)
 
 			if r.Records[url] == nil {
-				r.Records[url] = make(map[string]RequestRecord)
+				r.Records[url] = make(map[string]requestRecord)
 			}
 
 			r.Records[url][m] = reqRecord
@@ -161,12 +162,12 @@ func (r *Recorder) Load(filename string) error {
 	return nil
 }
 
-func (r *Recorder) GetRecordedResponse(url, method string) (RequestRecord, error) {
+func (r *recorder) GetRecordedResponse(url, method string) (requestRecord, error) {
 	if _, ok := r.Records[url]; !ok {
-		return RequestRecord{}, errors.New("Cannot find request " + url)
+		return requestRecord{}, errors.New("Cannot find request " + url)
 	}
 	if _, ok := r.Records[url][method]; !ok {
-		return RequestRecord{}, errors.New("Cannot find method " + method + " for URL " + url)
+		return requestRecord{}, errors.New("Cannot find method " + method + " for URL " + url)
 	}
 
 	rec := r.Records[url][method]
