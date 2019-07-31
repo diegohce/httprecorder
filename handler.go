@@ -85,8 +85,6 @@ func modifyResponseRecording(res *http.Response) error {
 		log.Error().Println(err)
 	}
 	return err
-
-	return nil
 }
 
 func singleJoiningSlash(a, b string) string {
