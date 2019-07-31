@@ -1,6 +1,6 @@
 # httprecorder
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/diegohce/httprecorder)](https://goreportcard.com/report/github.com/diegohce/httprecorder)<!-- [![GitHub release](https://img.shields.io/github/release/diegohce/httprecorder.svg)](https://github.com/diegohce/httprecorder/releases/) -->
+[![Go Report Card](https://goreportcard.com/badge/github.com/diegohce/chaos-proxy)](https://goreportcard.com/report/github.com/diegohce/httprecorder)<!-- [![GitHub release](https://img.shields.io/github/release/diegohce/httprecorder.svg)](https://github.com/diegohce/httprecorder/releases/) -->
 [![Github all releases](https://img.shields.io/github/downloads/diegohce/httprecorder/total.svg)](https://github.com/diegohce/httprecorder/releases/)
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/diegohce/httprecorder/blob/master/LICENSE)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/diegohce/httprecorder/graphs/commit-activity)
