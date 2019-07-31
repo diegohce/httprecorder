@@ -1,0 +1,20 @@
+{
+	"filename": "./recording.json",
+	"default_host": {
+		"host": "http://localhost:6666"
+	},
+	"paths": {
+		"/badservice/status/400": {
+			"host": "http://otherhost:6666"
+		},
+		"/badservice/status/403": {
+			"host": "http://anotherhost:8080"
+		},
+		"/badservice/status/404": {
+			"host": "http://superhost:80"
+		},
+		"/data/2.5/": {
+			"host": "http://api.openweathermap.org:80"
+		}
+	}
+}
